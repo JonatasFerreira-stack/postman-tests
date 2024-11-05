@@ -23,5 +23,5 @@ jobs:
         run: npm install -g newman
 
       - name: Run Postman Collection
-        run: newman run "API PUBLIC - Login e Register - WEB API.postman_collection(1).json"
+        run: newman run "API PUBLIC - Login e Register - WEB API.postman_collection.json"
 
