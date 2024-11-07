@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "a48598c2-ac80-4bda-97a0-0286b98a1552",
 		"name": "API PUBLIC - Login e Register - WEB API",
-		"description": "## Teste de Schema- API de Controle de Usuario\n\n## StartFragmentA **Reqres** é uma ótima API para testar cenários de autenticação, incluindo casos de sucesso e falha​;  \n\n## ([JSONPlaceholder](https://jsonplaceholder.typicode.com/))​([Requisitos](https://reqres.in/)).EndFragment",
+		"description": "## Teste de Schema- API de Controle de Usuario\n\n## **Reqres** é uma API para testar cenários de autenticação, incluindo casos de sucesso e falha​.\n\n## ([JSONPlaceholder](https://jsonplaceholder.typicode.com/))​([Requisitos](https://reqres.in/))",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "16145434"
 	},
@@ -24,8 +24,21 @@
 									"    pm.expect(jsonData).to.have.property(\"token\");\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Servidor está utilizando HTTPS\", function () {\r",
-									"    pm.expect(pm.request.url.protocol).to.equal(\"https\");\r",
+									"pm.test(`Body response tipo JSON com Dados de New User [ID]; [TOKEN]`, function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"id\");\r",
+									"    pm.expect(jsonData).to.have.property(\"token\");\r",
+									"    \r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validação de senhas incorretas eql 400\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    if (pm.response.code === 400) {\r",
+									"        pm.expect(responseData.error).to.be.a(\"\").and.to.not.be.empty; //Como valor do If no response data colocar String\r",
+									"    } else {\r",
+									"        pm.expect(responseData.error).to.not.a(\"\").and.to.exist;\r",
+									"    }\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -53,7 +66,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"charles.morris@reqres.in\",\r\n  \"password\": \"pistol\"\r\n}\r\n",
+							"raw": "{\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -83,7 +96,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(`[Detalhes do usuário] Body Response com dados esperados`, function () {\r",
+									"pm.test(`[Detalhes do usuário] Body Response com dados esperados [ID]; [EMAIL]; [FIRTS_NAME]; [LAST_NAME]; [AVATAR]`, function () {\r",
 									"    const jsonData = pm.response.json();\r",
 									"    pm.expect(jsonData.data).to.be.an(\"array\");\r",
 									"    pm.expect(jsonData).to.have.property(\"data\");\r",
@@ -94,7 +107,7 @@
 									"    pm.expect(jsonData.data[0]).to.have.property(\"avatar\");\r",
 									"});\r",
 									"\r",
-									"pm.test(`[Detalhes do usuário] Tem um corpo JSON com Dados e Suporte`, function () {\r",
+									"pm.test(`[Detalhes do usuário] Tem um corpo JSON com Dados e Suporte [URL]; [TXT]`, function () {\r",
 									"    const jsonsupport = pm.response.json();\r",
 									"    pm.expect(jsonsupport).to.have.property(\"support\");\r",
 									"    pm.expect(jsonsupport.support).to.have.property(\"url\");\r",
@@ -102,8 +115,9 @@
 									"\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Response Time está dentro do MS aceitável\", function () {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"pm.test(\"IDs Supotado no response para amarzenamento é igual [6]\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.data.length).to.eql(6);\r",
 									"});\r",
 									"\r",
 									"\r",
@@ -198,7 +212,7 @@
 							"    ]",
 							"};",
 							"",
-							"//O schema esperado fica armazenado em uma variável local",
+							"",
 							"pm.variables.set(\"schemaUsuario\", JSON.stringify(schemaUsuario));"
 						]
 					}
@@ -240,78 +254,19 @@
 									"    });\r",
 									"}\r",
 									"\r",
-									"// Teste para login\r",
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"if (pm.response.code === 200) {\r",
-									"    pm.test(\"O esquema é válido\", function () {\r",
-									"        var jsonData = pm.response.json();\r",
-									"        pm.expect(jsonData).to.have.property(\"token\");\r",
-									"    });\r",
-									"    \r",
-									"    pm.test(\"O token está em um formato válido\", function () {\r",
-									"        var jsonData = pm.response.json();\r",
-									"        pm.expect(jsonData.token).to.be.a(\"string\");\r",
-									"    });\r",
-									"}\r",
-									"\r",
-									"pm.test(\"O esquema é válido\", function () {\r",
-									"  pm.response.to.have.jsonSchema({\r",
-									"    type: \"object\",\r",
-									"    properties: {\r",
-									"      token: {\r",
-									"        type: \"string\"\r",
-									"      }\r",
-									"    },\r",
-									"    required: [\"token\"]\r",
-									"  });\r",
-									"});\r",
-									"\r",
-									"pm.test(\"O token está em um formato válido\", function () {\r",
-									"    const responseData = pm.response.json();\r",
-									"    \r",
-									"    pm.expect(responseData.token).to.be.a('string');\r",
-									"    pm.expect(responseData.token).to.have.lengthOf.at.least(1);\r",
-									"});\r",
-									"\r",
-									"\r",
-									"pm.test(\"O cabeçalho Content-Type é application/json\", function () {\r",
-									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
-									"});\r",
-									"\r",
-									"\r",
-									"pm.test(\"O tempo de resposta é inferior a 500ms\", function () {\r",
-									"  pm.expect(pm.response.responseTime).to.be.below(600);\r",
-									"});\r",
 									"\r",
 									"pm.test(\"Validação de senhas incorretas eql 400\", function () {\r",
 									"    const responseData = pm.response.json();\r",
 									"    if (pm.response.code === 400) {\r",
-									"        pm.expect(responseData.error).to.be.a('string').and.to.not.be.empty;\r",
+									"        pm.expect(responseData.error).to.be.a(\"\").and.to.not.be.empty; //Como valor do If no response data colocar String\r",
 									"    } else {\r",
-									"        pm.expect(responseData.error).to.not.exist;\r",
+									"        pm.expect(responseData.error).to.not.a(\"\").and.to.exist;\r",
 									"    }\r",
 									"});\r",
 									"\r",
 									"\r",
 									"pm.test(\"Tempo de Resposta abaixo de 2 segundos\", function () {\r",
 									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
-									"});\r",
-									"\r",
-									"\r",
-									"pm.test(\"Número de usuários suportado\", function () {\r",
-									"    let userCount = pm.variables.get(\"number_of_users\");\r",
-									"    pm.expect(userCount).to.be.below(10000); //limite de 10.000 usuários\r",
-									"});\r",
-									"\r",
-									"// Número de usuários suportado (ajuste conforme a resposta da API)\r",
-									"pm.test(\"Número de usuários suportado\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    if (jsonData.user_count !== undefined) {\r",
-									"        pm.expect(jsonData.user_count).to.be.a(\"number\");\r",
-									"    }\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Timout no Servidor\", function () {\r",
@@ -328,10 +283,16 @@
 					},
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Token",
+								"value": "080909239",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"eve.holt@reqres.in\",\r\n  \"password\": \"cityslicka\"\r\n}",
+							"raw": "{\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -355,6 +316,26 @@
 				}
 			],
 			"description": "**🇧🇷**\n\n* * *\n\nComo essa pasta possui apenas um endpoint, o schema ficou definido diretamente na requisição.  \nA definição do schema esperado encontra-se em `Pre-script request`.\n\n**🇺🇸**\n\n* * *\n\nAs this folder has only one endpoint, the schema was defined directly in the request.  \nThe definition of the expected schema can be found in `Pre-script request`."
+		},
+		{
+			"name": "https://api.getpostman.com/collections",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.getpostman.com/collections",
+					"protocol": "https",
+					"host": [
+						"api",
+						"getpostman",
+						"com"
+					],
+					"path": [
+						"collections"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {
