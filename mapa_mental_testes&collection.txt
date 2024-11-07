@@ -1,0 +1,58 @@
+Documentação dos Endpits e da SandBox Usada para teste de api Front e Back 
+https://reqres.in/
+
+
+Criação de Matriz dos testes para cada endpoint
+
+Teste da Collection "API PUBLIC - Login e Register - WEB API"
+
+    1. Cadastro de Usuário
+        - Objetivo: Validar a criação de novos usuários.
+        - Endpoints: POST /api/register
+        - Testes:
+            - Teste de Estresse: Enviar múltiplas requisições de criação de usuário para avaliar a estabilidade do endpoint sob alta carga.
+            - Teste de Carga: Aumentar gradualmente o número de requisições para monitorar o tempo de resposta.
+            - Teste de Comportamento:
+                - Verificar resposta com dados válidos (usuário e senha).
+                - Validar retorno para dados inválidos ou campos ausentes.
+                - Confirmação de erros para senhas incorretas (status 400).
+            - Monitoramento: Executar testes periodicamente para verificar a estabilidade do endpoint.
+        - Scripts:
+            - Validar presença de id e token no corpo da resposta.
+            - Verificar o status do código 201 para confirmações bem-sucedidas.
+
+    2. Detalhes de Usuário
+        - Objetivo: Consultar dados detalhados de um usuário específico.
+        - Endpoints: GET /api/users/{id}
+        - Testes:
+            - Teste de Estresse: Consultar detalhes de usuários simultaneamente para verificar a resiliência do serviço.
+            - Teste de Carga: Aumentar o número de requisições progressivamente e observar o comportamento do tempo de resposta.
+            - Teste de Comportamento:
+                - Consultar dados de usuário existente e não existente.
+                - Garantir retorno de campos obrigatórios como id, email, first_name, last_name, e avatar.
+            - Monitoramento: Verificar a resposta para acessos frequentes, garantindo que o endpoint se mantenha estável.
+        - Scripts:
+            - Testes para garantir que o body da resposta inclua os campos obrigatórios.
+            - Verificar se o status de resposta é 200.
+
+    3. Login de Usuário
+        - Objetivo: Autenticar o usuário e garantir resposta correta para credenciais válidas e inválidas.
+        - Endpoints: POST /api/login
+        - Testes:
+            - Teste de Estresse: Enviar múltiplas tentativas de login simultâneas.
+            - Teste de Carga: Aumentar a quantidade de requisições gradualmente para observar a estabilidade do serviço.
+            - Teste de Comportamento:
+                - Autenticação com credenciais válidas (e.g., email e senha corretos).
+                - Verificar erro apropriado (400) para senhas incorretas.
+                - Confirmação de limites de interação para impedir tentativa de login após muitas tentativas.
+            - Monitoramento: Testar periodicamente para verificar disponibilidade do login.
+        - Scripts:
+            - Verificar limite de tentativas de login.
+            - Validar tempo de resposta inferior a 2 segundos.
+            - Confirmar que o status da resposta está correto (200 para sucesso e 400 para falhas).
+
+    4. Metodologias Utilizadas nos Testes
+        - Teste de Estresse: Testes contínuos com alta carga em um curto período, verificando a resiliência do endpoint.
+        - Teste de Carga: Requisições incrementais ao longo do tempo, avaliando como o sistema lida com cargas crescentes.
+        - Teste de Comportamento: Confirmação da resposta do endpoint para diferentes cenários de entrada, incluindo dados válidos e inválidos.
+        - Monitoramento: Execução periódica dos testes para garantir a estabilidade e a disponibilidade do serviço.
